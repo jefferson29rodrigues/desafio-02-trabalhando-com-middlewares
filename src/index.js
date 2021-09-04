@@ -26,6 +26,20 @@ function checksExistsUserAccount(request, response, next) {
 
 function checksCreateTodosUserAvailability(request, response, next) {
   // Complete aqui
+  const { user } = request;
+
+  //plano grátis 10 todos cadastrados
+  const planoGratis = 10; 
+  
+  const userTodos = user.todos.length;
+
+  if (userTodos >= planoGratis) {
+    if (user.pro === false) {
+      return response.json({ error: 'Plano Grátis excedido! Contrate o Plano Pró!' });
+    }
+  }  
+
+  return next();
 }
 
 function checksTodoExists(request, response, next) {
