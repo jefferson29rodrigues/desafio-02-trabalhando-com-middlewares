@@ -16,7 +16,7 @@ function checksExistsUserAccount(request, response, next) {
   const user = users.find((user) => user.username === username);
 
   if (!user) {
-    return response.json({ error: 'User does not exist!' });
+    return response.status(404).json({ error: 'User does not exist!' });
   }
 
   request.user = user;
