@@ -49,7 +49,11 @@ function checksTodoExists(request, response, next) {
   const { username } = request.headers;
   const { id } = request.params;
 
-  validate(id);
+  const validateId = validate(id);
+
+  if (!validateId) {
+    return response.status(400).json({ error: 'Id not valid' });
+  }
 
   const user = users.find((user) => user.username === username);
 
