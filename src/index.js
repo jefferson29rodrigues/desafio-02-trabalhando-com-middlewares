@@ -28,15 +28,17 @@ function checksCreateTodosUserAvailability(request, response, next) {
   // Complete aqui
   const { user } = request;
 
+  if (user.pro) {
+    return next();
+  }
+
   //plano grátis 10 todos cadastrados
-  const planoGratis = 10; 
+  const planoGratis = 10;
   
   const userTodos = user.todos.length;
 
   if (userTodos >= planoGratis) {
-    if (user.pro === false) {
-      return response.json({ error: 'Plano Grátis excedido! Contrate o Plano Pró!' });
-    }
+    return response.status(403).json({ error: 'Plano Grátis excedido! Contrate o Plano Pró!' });
   }  
 
   return next();
@@ -50,6 +52,11 @@ function checksTodoExists(request, response, next) {
   validate(id);
 
   const user = users.find((user) => user.username === username);
+
+  if (!user) {
+    return response.status(404).json({ error: 'User does not exist!' });
+  }
+
   const todoUser = user.todos.find((todo) => todo.id === id);
 
   request.user = user;
